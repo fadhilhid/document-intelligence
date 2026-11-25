@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f4ee" />
+    <meta name="description" content="A source-linked tender review workspace for sales teams." />
+    <title>DocIntel · Tender desk</title>
+    <link rel="stylesheet" href="./styles.css?v=20261125-sidebar-reflow" />
+    <link rel="stylesheet" href="./workflow.css?v=20261125-sidebar-reflow" />
+    <script src="./app.js?v=20261125-sidebar-reflow" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navigasi utama" id="sidebar">
+        <a class="brand" href="#workspace" aria-label="DocIntel home" id="brand-home">
+          <span><strong>DocIntel</strong><small>tender desk</small></span>
+        </a>
+        <div class="side-label" data-i18n="workspaceNav">WORKSPACE</div>
+        <nav class="nav-list">
+          <button class="nav-item active" type="button" data-view="workspace" data-i18n="tenderWorkspace">Tender workspace</button>
+          <button class="nav-item" type="button" data-view="checklist" data-i18n="requirements">Requirements</button>
+          <button class="nav-item" type="button" data-view="documents" data-i18n="documents">Documents</button>
+        </nav>
+        <label class="language-control"><span data-i18n="language">Language</span><select id="language-select" aria-label="Language"><option value="en">English</option><option value="id">Bahasa Indonesia</option></select></label>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="topbar-location"><div class="breadcrumb"><span data-i18n="workspaces">Workspaces</span><span class="crumb-slash">/</span><strong id="crumb-current">Overview</strong></div></div>
+          <div class="top-actions"><span class="prototype-tag"><span></span><span data-i18n="prototype">Prototype</span></span><button class="help-button" type="button" id="about-button" data-i18n="aboutBuild">About this build</button></div>
+        </header>
+
+        <section class="page-content" id="view-workspace" aria-labelledby="page-title">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow" data-i18n="tenderDesk">TENDER REVIEW DESK</p>
+              <h1 id="page-title" data-i18n="headline">One tender, one clear workspace.</h1>
+              <p class="lede" data-i18n="intro">Keep the RFP and its annexes together while your team reviews requirements and evidence.</p>
+            </div>
+            <button class="primary-button" id="new-workspace" type="button"><span aria-hidden="true">＋</span><span data-i18n="newWorkspace">New workspace</span></button>
+          </div>
+
+          <div class="notice" role="status" id="build-notice">
+            <span class="notice-icon" aria-hidden="true">i</span>
+            <p><strong data-i18n="internalPrototype">Internal prototype.</strong> <span data-i18n="privacyNotice">PDFs are stored on this server and converted there. Checklist generation uses the Hermes model configured by the administrator.</span></p>
+            <button class="notice-close" type="button" aria-label="Dismiss notice" id="dismiss-notice">×</button>
+          </div>
+
+          <div class="overview-row">
+            <div class="section-title"><div><h2 id="list-title" data-i18n="yourWorkspaces">Your workspaces</h2><p id="list-subtitle" data-i18n="workspaceSubhead">Tender documents, gathered in one place.</p></div><span class="count-chip" id="workspace-count">0</span></div>
+            <button class="quiet-button" type="button" id="sort-button" aria-label="Sort workspaces" data-i18n-aria="sortWorkspaces"><span data-i18n="recentlyUpdated">Recently updated</span> <span aria-hidden="true">⌄</span></button>
+          </div>
+
+          <div id="workspace-list" class="workspace-list"></div>
+          <div id="empty-state" class="empty-state">
+            <div class="empty-illustration" aria-hidden="true"><div class="paper paper-back"></div><div class="paper paper-front"><span></span><span></span><span></span></div><div class="small-plus">+</div></div>
+            <h2 data-i18n="noWorkspaces">No workspaces yet</h2>
+            <p data-i18n="startWorkspace">Start with the tender opportunity your team is reviewing. Keep its RFP and annexes together in one place.</p>
+            <button class="primary-button" type="button" id="empty-create"><span aria-hidden="true">＋</span><span data-i18n="createWorkspace">Create a workspace</span></button>
+            <small data-i18n="noDocsSession">No tender documents have been added in this session.</small>
+          </div>
+
+          <footer class="page-foot"><span>DocIntel</span><span data-i18n="footerLine">Evidence first. Decisions stay with your team.</span></footer>
+        </section>
+
+        <section class="page-content hidden" id="view-checklist" aria-labelledby="checklist-title">
+          <div class="page-heading compact-heading"><div><p class="eyebrow" data-i18n="reviewQueue">REVIEW QUEUE</p><h1 id="checklist-title" data-i18n="requirements">Requirements</h1><p class="lede" data-i18n="requirementsIntro">Candidate items need a source citation and human review before they become commitments.</p></div></div>
+          <div class="empty-state secondary-empty" id="checklist-empty"><div class="empty-illustration checklist-mark" aria-hidden="true">☷</div><h2 data-i18n="noChecklist">No checklist yet</h2><p data-i18n="noChecklistHelp">Open a tender workspace, upload its PDFs, then ask Hermes to prepare a sales screening checklist.</p><button class="text-button" type="button" data-go="workspace" data-i18n="goTenderWorkspace">Go to tender workspace</button></div>
+          <div class="checklist-content hidden" id="checklist-content">
+            <div class="checklist-summary"><div><p class="eyebrow" data-i18n="draftReview">DRAFT FOR HUMAN REVIEW</p><p id="checklist-summary"></p><small id="checklist-path"></small></div><span class="count-chip" id="checklist-count"></span></div>
+            <div id="checklist-priority-overview"></div>
+            <div id="checklist-gaps"></div>
+            <div class="requirement-list" id="checklist-items"></div>
+            <div class="checklist-questions" id="checklist-questions"></div>
+          </div>
+        </section>
+
+        <section class="page-content hidden" id="view-documents" aria-labelledby="documents-title">
+          <div class="page-heading compact-heading"><div><p class="eyebrow" data-i18n="sourceMaterial">SOURCE MATERIAL</p><h1 id="documents-title" data-i18n="documents">Documents</h1><p class="lede" data-i18n="documentsIntro">Keep each RFP and annex in the tender package it belongs to.</p></div></div>
+          <div class="empty-state secondary-empty" id="documents-empty"><div class="empty-illustration checklist-mark" aria-hidden="true">▧</div><h2 data-i18n="noDocuments">No documents yet</h2><p data-i18n="noDocumentsHelp">Upload tender PDFs to a workspace to see their extraction status here.</p><button class="text-button" type="button" data-go="workspace" data-i18n="goTenderWorkspace">Go to tender workspace</button></div>
+          <div class="documents-content hidden" id="documents-content"><div class="documents-overview" id="documents-overview"></div><div class="workspace-documents-list" id="documents-list"></div></div>
+        </section>
+      </main>
+    </div>
+    <button class="sidebar-reveal-trigger" type="button" id="sidebar-reveal-trigger" aria-label="Show navigation"><span class="sr-only" data-i18n="showSidebar">Show sidebar</span></button>
+
+    <dialog id="workspace-dialog" class="modal" aria-labelledby="dialog-title">
+      <form id="workspace-form">
+        <div class="modal-head"><div><p class="eyebrow" data-i18n="newPackage">NEW PACKAGE</p><h2 id="dialog-title" data-i18n="createTenderWorkspace">Create a tender workspace</h2></div><button class="icon-button" id="workspace-close" type="button" aria-label="Close dialog" data-i18n-aria="closeDialog">×</button></div>
+        <p class="modal-copy" data-i18n="workspaceRule">Use one workspace for one tender opportunity and all its related files.</p>
+        <label class="field-label" for="workspace-name"><span data-i18n="workspaceName">Workspace name</span><span data-i18n="required">Required</span></label>
+        <input id="workspace-name" name="name" placeholder="e.g. MASTRAN ITS - RFP" data-i18n-placeholder="workspacePlaceholder" required maxlength="120" autocomplete="off" />
+        <label class="field-label" for="buyer-name"><span data-i18n="buyerOrg">Buyer or organization</span><span data-i18n="optional">Optional</span></label>
+        <input id="buyer-name" name="buyer" placeholder="Organization name" data-i18n-placeholder="buyerPlaceholder" maxlength="120" autocomplete="off" />
+        <label class="field-label" for="closing-date"><span data-i18n="closingDate">Tender closing date</span><span data-i18n="optional">Optional</span></label>
+        <input id="closing-date" name="closingDate" type="date" />
+        <div class="modal-actions"><button class="secondary-button" id="workspace-cancel" type="button" data-i18n="cancel">Cancel</button><button class="primary-button" id="create-button" type="submit" data-i18n="createWorkspace">Create workspace</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="detail-dialog" class="modal detail-modal" aria-labelledby="detail-title">
+      <div class="modal-head"><div><p class="eyebrow" data-i18n="tenderPackage">TENDER PACKAGE</p><h2 id="detail-title">Workspace</h2></div><button class="icon-button" id="detail-close" type="button" aria-label="Close dialog" data-i18n-aria="closeDialog">×</button></div>
+      <div class="detail-meta" id="detail-meta"></div>
+      <div class="section-title document-heading"><div><h3 data-i18n="sourceDocuments">Source documents</h3><p data-i18n="sourceDocumentsHelp">Original PDFs are stored on this server; a page-marked Markdown copy is extracted there.</p></div><span class="count-chip" id="document-count">0</span></div>
+      <label class="drop-zone" id="drop-zone" for="pdf-input" tabindex="0">
+        <input id="pdf-input" type="file" accept="application/pdf,.pdf" multiple />
+        <span class="upload-mark" aria-hidden="true">↑</span><strong data-i18n="addTenderPdfs">Add tender PDFs</strong><span data-i18n="dropFiles">Choose files or drop them here · PDF · up to 100 MB each</span>
+      </label>
+      <div class="file-list" id="file-list"></div>
+      <div class="upload-state" id="upload-state" role="status" aria-live="polite"></div>
+      <div class="processing-note"><span class="processing-dot"></span><span id="processing-message"><strong>Files stay on this server.</strong> Uploading stores each PDF and extracts page text here. Clicking “Build requirement checklist” asks the backend to send the extracted Markdown paths to the configured Hermes API.</span></div>
+      <div class="modal-actions"><button class="secondary-button" id="detail-done" type="button" data-i18n="done">Done</button><button class="primary-button" id="generate-button" type="button" data-i18n="buildChecklist">Build requirement checklist</button></div>
+    </dialog>
+
+    <dialog id="about-dialog" class="modal about-modal" aria-labelledby="about-title">
+      <div class="modal-head"><div><p class="eyebrow" data-i18n="buildStatus">BUILD STATUS</p><h2 id="about-title" data-i18n="prototypeFeatures">What works in this prototype</h2></div><button class="icon-button" id="about-close" type="button" aria-label="Close dialog" data-i18n-aria="closeDialog">×</button></div>
+      <ul><li data-i18n="featureWorkspace">Create persistent tender workspaces on this server.</li><li data-i18n="featureUpload">Upload PDFs and keep the original files unchanged.</li><li data-i18n="featureExtract">Extract page-marked Markdown on the server for Hermes to read.</li><li data-i18n="featureChecklist">Generate a sales screening checklist and review its source citations.</li></ul>
+      <p class="about-limit" data-i18n="prototypeLimit">Internal prototype: it has no sign-in. Only expose it inside a trusted, access-controlled network. Scanned pages are flagged for review; OCR and full technical compliance review are not connected.</p>
+      <div class="modal-actions"><button class="primary-button" id="about-done" type="button" data-i18n="understood">Understood</button></div>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

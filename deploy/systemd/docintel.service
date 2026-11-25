@@ -1,0 +1,16 @@
+[Unit]
+Description=DocIntel tender workspace
+After=network-online.target hermes-gateway.service
+Wants=network-online.target hermes-gateway.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/bisdev/apps/document-intelligence
+EnvironmentFile=/home/bisdev/.config/docintel/docintel.env
+ExecStart=/home/bisdev/apps/document-intelligence/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000
+Restart=on-failure
+RestartSec=5
+UMask=0077
+
+[Install]
+WantedBy=default.target
